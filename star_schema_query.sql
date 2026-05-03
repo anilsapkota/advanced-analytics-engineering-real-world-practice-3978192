@@ -1,0 +1,20 @@
+select * 
+from sales_data;
+
+
+create table sales_data_cleaned as 
+select * 
+from sales_data;
+
+update sales_data_cleaned
+set OrderDate = replace(replace(OrderDate , '"',''), '''','');
+
+create table dim_date as 
+select distinct OrderDate
+  , strftime('%Y',OrderDate) as Year
+  ,strftime('%m',OrderDate) as Month
+  ,strftime('%d',OrderDate) as Day
+  ,strftime('%w',OrderDate) as DayofWeek
+  ,strftime('%w',OrderDate) as WeekNumber
+  , case strftime('%w', OrderDate) when '0' then 1 when '6' then 1 else 0 end as IsWeekend
+from sales_data_cleaned;
