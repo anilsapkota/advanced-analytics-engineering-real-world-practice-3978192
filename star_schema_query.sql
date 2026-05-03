@@ -18,3 +18,42 @@ select distinct OrderDate
   ,strftime('%w',OrderDate) as WeekNumber
   , case strftime('%w', OrderDate) when '0' then 1 when '6' then 1 else 0 end as IsWeekend
 from sales_data_cleaned;
+
+
+create table dim_employees as 
+select distinct sdc.EmpID
+, sdc.EmpName
+, sdc.EmpTitle
+, sdc.SalesReg
+, rd.StartDate 
+from sales_data_cleaned as sdc 
+left join reps_data as rd 
+    on sdc.EmpID = rd.EmpID; 
+
+
+create table dim_customers as 
+select distinct CustID
+ , CustName
+ , CustType
+ , CustState
+ from sales_data_cleaned; 
+
+create table dim_products as 
+select distinct ProdNumber
+  , ProdName
+  , ProdCategory
+from sales_data_cleaned;
+
+
+create table dim_orders as 
+select distinct OrderNum
+ , OrderDate
+ , OrderType
+ , EmpID
+ , CustID
+ , ProdNumber
+ , Quantity
+ , Price
+ , Discount
+ , OrderTotal 
+from sales_data_cleaned; 
